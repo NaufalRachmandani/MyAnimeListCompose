@@ -42,7 +42,7 @@ fun AnimeDetailScreen(
     val favoriteState = animeDetailViewModel.favoriteState.value
 
     LaunchedEffect(key1 = Unit) {
-        animeDetailViewModel.isInFavorite(anime.malId ?: 0)
+        animeDetailViewModel.isInFavorite(anime)
     }
 
     Scaffold(
@@ -141,12 +141,7 @@ fun InitiateUI(anime: Anime = Anime(), isPreview: Boolean = false, state: AnimeD
                 .fillMaxHeight()
                 .background(Primary)
         ) {
-            DescSection(
-                source = anime.source,
-                rating = anime.rating,
-                listGenre = anime.genres,
-                synopsis = anime.synopsis
-            )
+            CharactersSection()
             if (state.message.isNotBlank()) {
                 Toast.makeText(
                     context,
@@ -172,7 +167,7 @@ fun TopSection(
     status: String,
     isPreview: Boolean = false
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(verticalAlignment = Alignment.Top) {
         if (isPreview) {
             Box(
                 modifier = Modifier

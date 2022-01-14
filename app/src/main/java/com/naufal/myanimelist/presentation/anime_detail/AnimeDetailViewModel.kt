@@ -35,25 +35,25 @@ class AnimeDetailViewModel @Inject constructor(
             if (anime.malId != null && anime.malId != 0) {
                 insertAnimeUseCase(anime)
             }
-            isInFavorite(anime.malId ?: 0)
+            isInFavorite(anime)
         }
     }
 
     fun deleteAnime(anime: Anime) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteAnimeUseCase(anime)
-            isInFavorite(anime.malId ?: 0)
+            isInFavorite(anime)
         }
     }
 
-    fun isInFavorite(id: Int) {
+    fun isInFavorite(anime: Anime) {
         viewModelScope.launch(Dispatchers.IO) {
-            checkFavoriteUseCase(id).onStart {
+            checkFavoriteUseCase(anime.malId ?: 0).onStart {
             }.catch { e ->
                 Log.i("AnimeDetailViewModel", e.toString())
                 _favoriteState.value = FavoriteState(isFavorite = false)
             }.collect {
-                Log.i("AnimeDetailViewModel", "is in favorite $id = $it")
+                Log.i("AnimeDetailViewModel", "is in favorite ${anime.title} = $it")
                 _favoriteState.value = FavoriteState(isFavorite = it)
             }
         }
